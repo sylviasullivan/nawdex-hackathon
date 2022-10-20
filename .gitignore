@@ -1,3 +1,12 @@
+ccf_data/
+clc-qc-qi_data/
+cre_data/
+cloudclass_data/
+domain-mean_data/
+occurrence_data/
+q_data/
+figs/
+*.nc
 **dask-worker-space
 **.ipynb_checkpoints
 **__pycache__
