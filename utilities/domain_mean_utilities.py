@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import xarray as xr
 import sys, os
-sys.path.append(os.path.abspath("/xdisk/sylvia/nawdex-hackathon/shared/"))
+sys.path.append(os.path.abspath("/groups/sylvia/nawdex-hackathon/shared/"))
 import dict_nawdexsims
 # simulations dictionary
 simdict = dict_nawdexsims.simdictionary()
@@ -19,7 +19,7 @@ def adjust_spines(ax, spines):
 def select_analysis_days(ds, expid):
     
     import sys
-    sys.path.append('/xdisk/sylvia/nawdex-hackathon/shared')
+    sys.path.append('/groups/sylvia/nawdex-hackathon/shared')
 
     import dict_nawdexsims
     simdict     = dict_nawdexsims.simdictionary()
@@ -138,13 +138,13 @@ def get_fulllevel_height():
     sim = '0001'
     expid = 'nawdexnwp-' + resolution + '-mis-' + sim
     # read ocean mask
-    ipath_oceanmask = '/xdisk/sylvia/nawdex-hackathon/domain-mean/'
+    ipath_oceanmask = '/groups/sylvia/nawdex-hackathon/domain-mean_data/'
     da_ocean = xr.open_dataset(ipath_oceanmask + '/openoceanmask/' + expid + \
                                '_openoceanmask.nc')['mask_openocean']
     index = np.where(da_ocean == 1)[0]
     del da_ocean, ipath_oceanmask
     # read z_ifc data
-    ipath = '/xdisk/sylvia/nawdex-hackathon/domain-mean/'
+    ipath = '/groups/sylvia/nawdex-hackathon/domain-mean_data/'
     ds = xr.open_dataset(ipath + 'nawdexnwp-' + resolution + '-mis-' + \
                          sim + '_2016092200_fg_DOM01_ML_0036.nc')
     del ipath
@@ -250,23 +250,24 @@ def plot_varmean(fig, _ds_list, _var, fs, lw):
     # time average over 14 days
     line1 = np.mean(elist1,axis=0)
     zfull = get_fulllevel_height()
-    
+ 
+    # pulling my color codes from here: https://gist.github.com/thriveth/8560036
     if _var == 'lw_crh':
-        plt.plot(line1*86400,zfull[15:50]/1e3,linewidth=lw,label='lw_crh',color=colordict['80km'])
+        plt.plot(line1*86400,zfull[0][15:50]/1e3,linewidth=lw,label='LW CRH',color=[0.21,0.494,0.722]) #colordict['80km'])
     if _var == 'sw_crh':
-        plt.plot(line1*86400,zfull[15:50]/1e3,linewidth=lw,label='sw_crh',color=colordict['80km'],linestyle='--')    
+        plt.plot(line1*86400,zfull[0][15:50]/1e3,linewidth=lw,label='SW CRH',color=[0.89,0.1019,0.1098])    
     if _var == 'ddt_temp_radlw':
-        plt.plot(line1*86400,zfull[15:50]/1e3,linewidth=lw,label='lw_rad',color=colordict['40km'])
+        plt.plot(line1*86400,zfull[0][15:50]/1e3,linewidth=lw,label='LW clr sky',color=[0.21,0.494,0.722],linestyle='--')
     if _var == 'ddt_temp_radsw':
-        plt.plot(line1*86400,zfull[15:50]/1e3,linewidth=lw,label='sw_rad',color=colordict['40km'],linestyle='--'    )
+        plt.plot(line1*86400,zfull[0][15:50]/1e3,linewidth=lw,label='SW clr sky',color=[0.89,0.1019,0.1098],linestyle='--')
     if _var == 'ddt_temp_dyn2':
-        plt.plot(line1*86400,zfull[15:50]/1e3,linewidth=lw,label='dyn',color=colordict['20km'])
+        plt.plot(line1*86400,zfull[0][15:50]/1e3,linewidth=lw,label='Dyn',color=[0.87,0.87,0])
     if _var == 'ddt_temp_turb':
-        plt.plot(line1*86400,zfull[15:50]/1e3,linewidth=lw,label='turb',color=colordict['10km'])
+        plt.plot(line1*86400,zfull[0][15:50]/1e3,linewidth=lw,label='Turb',color=[1,0.498,0.])
     if _var == 'ddt_temp_pconv':
-        plt.plot(line1*86400,zfull[15:50]/1e3,linewidth=lw,label='conv',color=colordict['5km'])
+        plt.plot(line1*86400,zfull[0][15:50]/1e3,linewidth=lw,label='Conv',color=[0.651,0.337,0.1568])
     if _var == 'ddt_temp_mphy':
-        plt.plot(line1*86400,zfull[15:50]/1e3,linewidth=lw,label='mphy',color=colordict['2km'])    
+        plt.plot(line1*86400,zfull[0][15:50]/1e3,linewidth=lw,label='Mphy',color=[0.596,0.3058,0.6392])    
         
     plt.tick_params(labelsize=13)
     #plt.ylabel("Height (km)",fontsize=12)
@@ -289,9 +290,9 @@ def plot_varmean(fig, _ds_list, _var, fs, lw):
     ax.text(0.02,0.95,'1-moment',fontsize=fs,transform=ax.transAxes)
            
     #plt.title('Microphysics: One-moment scheme',fontsize=fs, pad=20)
-    plt.xlabel('Heating rates (K/day)',fontsize=fs)
-    plt.legend(fontsize=fs-3,frameon=False,loc='upper right',bbox_to_anchor=(1.05,0.98))
-    plt.ylabel("Height (km)",fontsize=fs)
+    plt.xlabel(r'Heating rates [K day$^{-1}$]',fontsize=fs)
+    plt.legend(fontsize=fs-3,frameon=False,loc='upper right',bbox_to_anchor=(1.1,0.98))
+    plt.ylabel("Height [km]",fontsize=fs)
     
     
     # mphy = 2
@@ -302,21 +303,21 @@ def plot_varmean(fig, _ds_list, _var, fs, lw):
     line2 = np.mean(elist2,axis=0)
     
     if _var == 'lw_crh':
-        plt.plot(line2*86400,zfull[15:50]/1e3,linewidth=lw,label='lw_crh',color=colordict['80km'])
+        plt.plot(line2*86400,zfull[0][15:50]/1e3,linewidth=lw,label='LW CRH',color=[0.21,0.494,0.722])
     if _var == 'sw_crh':
-        plt.plot(line2*86400,zfull[15:50]/1e3,linewidth=lw,label='sw_crh',color=colordict['80km'],linestyle='--')    
+        plt.plot(line2*86400,zfull[0][15:50]/1e3,linewidth=lw,label='SW CRH',color=[0.89,0.1019,0.1098])    
     if _var == 'ddt_temp_radlw':
-        plt.plot(line2*86400,zfull[15:50]/1e3,linewidth=lw,label='lw_rad',color=colordict['40km'])
+        plt.plot(line2*86400,zfull[0][15:50]/1e3,linewidth=lw,label='LW clr sky',color=[0.21,0.494,0.722],linestyle='--')
     if _var == 'ddt_temp_radsw':
-        plt.plot(line2*86400,zfull[15:50]/1e3,linewidth=lw,label='sw_rad',color=colordict['40km'],linestyle='--')    
+        plt.plot(line2*86400,zfull[0][15:50]/1e3,linewidth=lw,label='SW clr sky',color=[0.89,0.1019,0.1098],linestyle='--')    
     if _var == 'ddt_temp_dyn2':
-        plt.plot(line2*86400,zfull[15:50]/1e3,linewidth=lw,label='dyn',color=colordict['20km'])
+        plt.plot(line2*86400,zfull[0][15:50]/1e3,linewidth=lw,label='Dyn',color=[0.87,0.87,0])
     if _var == 'ddt_temp_turb':
-        plt.plot(line2*86400,zfull[15:50]/1e3,linewidth=lw,label='turb',color=colordict['10km'])
+        plt.plot(line2*86400,zfull[0][15:50]/1e3,linewidth=lw,label='Turb',color=[1,0.498,0])
     if _var == 'ddt_temp_pconv':
-        plt.plot(line2*86400,zfull[15:50]/1e3,linewidth=lw,label='conv',color=colordict['5km'])
+        plt.plot(line2*86400,zfull[0][15:50]/1e3,linewidth=lw,label='Conv',color=[0.651,0.337,0.1568])
     if _var == 'ddt_temp_mphy':
-        plt.plot(line2*86400,zfull[15:50]/1e3,linewidth=lw,label='mphy',color=colordict['2km']) 
+        plt.plot(line2*86400,zfull[0][15:50]/1e3,linewidth=lw,label='Mphy',color=[0.596,0.3058,0.6392]) 
         
     plt.tick_params(labelsize=13)
     #plt.ylabel("Height (km)",fontsize=12)
@@ -339,5 +340,5 @@ def plot_varmean(fig, _ds_list, _var, fs, lw):
     ax.text(0.02,0.95,'2-moment',fontsize=fs,transform=ax.transAxes)   
  
     #plt.title('Microphysics: Two-moment scheme',fontsize=fs, pad=20)
-    plt.xlabel('Heating rates (K/day)',fontsize=fs)
+    plt.xlabel(r'Heating rates [K day$^{-1}$]',fontsize=fs)
 

@@ -18,7 +18,7 @@ def sexy_axes2(ax,fs):
 # Functions to load cloud radiative heating and sea-land mask
 def mpi_radheating():
     
-    path = '/xdisk/sylvia/nawdex-hackathon/globalmodels/'
+    path = '/groups/sylvia/nawdex-hackathon/globalmodels/'
     
     # PRP with clouds zero, this gives -1*cloud-radiative heating
     filename = path+'ecav0001_1035-1039.prp_cloudsoff.timmean.shiftedlon.nc'
@@ -88,7 +88,7 @@ def icon_radheating():
     # Yet, because we are below limiting the analysis to ocean points,
     # very few -if any at all- grid points will be affected and have levels below the surface.
     
-    path = '/xdisk/sylvia/nawdex-hackathon/globalmodels/'
+    path = '/groups/sylvia/nawdex-hackathon/globalmodels/'
     file = path+'ICON-NWP_prp_AMIP_free_3d_fluxes_heatingrates_mm.shiftedlon.nc'
     ds   = xr.open_dataset(file)
     
@@ -120,7 +120,7 @@ def icon_radheating():
 
 def lmd_radheating():
     
-    path = '/xdisk/sylvia/nawdex-hackathon/globalmodels/'
+    path = '/groups/sylvia/nawdex-hackathon/globalmodels/'
     filename = path+'l5aam001_19810101_20091230.histmth.timmean.nc'
     
     ds = ( xr.open_dataset(filename)[['dtswr', 'dtlwr', 'dtsw0', 'dtlw0', 'fract_ter']]
