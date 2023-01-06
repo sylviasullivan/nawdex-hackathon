@@ -257,9 +257,9 @@ def plot_varmean(fig, _ds_list, _var, fs, lw):
     if _var == 'sw_crh':
         plt.plot(line1*86400,zfull[0][15:50]/1e3,linewidth=lw,label='SW CRH',color=[0.89,0.1019,0.1098])    
     if _var == 'ddt_temp_radlw':
-        plt.plot(line1*86400,zfull[0][15:50]/1e3,linewidth=lw,label='LW clr sky',color=[0.21,0.494,0.722],linestyle='--')
+        plt.plot(line1*86400,zfull[0][15:50]/1e3,linewidth=lw,label='LW Clr Sky',color=[0.21,0.494,0.722],linestyle='--')
     if _var == 'ddt_temp_radsw':
-        plt.plot(line1*86400,zfull[0][15:50]/1e3,linewidth=lw,label='SW clr sky',color=[0.89,0.1019,0.1098],linestyle='--')
+        plt.plot(line1*86400,zfull[0][15:50]/1e3,linewidth=lw,label='SW Clr Sky',color=[0.89,0.1019,0.1098],linestyle='--')
     if _var == 'ddt_temp_dyn2':
         plt.plot(line1*86400,zfull[0][15:50]/1e3,linewidth=lw,label='Dyn',color=[0.87,0.87,0])
     if _var == 'ddt_temp_turb':
@@ -292,7 +292,7 @@ def plot_varmean(fig, _ds_list, _var, fs, lw):
     #plt.title('Microphysics: One-moment scheme',fontsize=fs, pad=20)
     plt.xlabel(r'Heating rates [K day$^{-1}$]',fontsize=fs)
     plt.legend(fontsize=fs-3,frameon=False,loc='upper right',bbox_to_anchor=(1.1,0.98))
-    plt.ylabel("Height [km]",fontsize=fs)
+    plt.ylabel("Altitude [km]",fontsize=fs)
     
     
     # mphy = 2

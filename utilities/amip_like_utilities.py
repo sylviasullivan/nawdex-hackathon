@@ -157,4 +157,18 @@ def make_nawdexmean(ds):
     return mean
 
 
+# extract the zonal mean 32N-71N
+def make_zonalmean(ds):
+    # select lon-lat box
+    aux = ( ds.sel(lat=slice(32,71)) )
+    # if lat is ordered from North to South, we catch this here
+    if ds.lat[0]>ds.lat[1]:
+        aux = ( ds.sel(lat=slice(71,32)) )
 
+    # average spatially over the ocean, set weights to zero over land
+    weights = np.cos(np.deg2rad(aux.lat))
+    weights.name = "weights"
+    weights = weights * xr.where(aux['slm']<0.1, 1, 0)
+    mean = aux.weighted(weights).mean(dim=['lat','lon'])
+
+    return mean
